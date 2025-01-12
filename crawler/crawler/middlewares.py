@@ -104,3 +104,26 @@ class CrawlerDownloaderMiddleware:
 
 from scrapy.exceptions import IgnoreRequest
 from collections import defaultdict
+
+
+class DomainPageLimitMiddleware:
+    def __init__(self, domain_page_limit):
+        self.domain_page_limit = domain_page_limit
+        self.pages_per_domain = defaultdict(int)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            domain_page_limit=crawler.settings.getint("DOMAIN_PAGE_LIMIT", 50)
+        )
+
+    def process_request(self, request, spider):
+        domain = request.url.split("/")[2]
+        if self.pages_per_domain[domain] >= self.domain_page_limit:
+            raise IgnoreRequest(f"Reached page limit for domain: {domain}")
+        return None
+
+    def process_response(self, request, response, spider):
+        domain = request.url.split("/")[2]
+        self.pages_per_domain[domain] += 1
+        return response
