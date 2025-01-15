@@ -1,1 +1,32 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto py-6 px-4">
+  <header class="flex flex-col items-left justify-between mb-6">
+    <nav>
+      <h1 class="text-3xl font-bold text-blue-400 mb-6">
+        <a href="{{ url_for('home') }}" class="">Mini Search Engine</a>
+      </h1>
+    </nav>
+  </header>
+
+  <section class="bg-gray-800 rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-semibold text-blue-400 mb-4">Search engine stats</h1>
+    <p>This page lists out the domains that populate the index along with the number of pages that we have indexed for
+      those domains.</p>
+
+    <div id="result-list" class="mt-5">
+      {% for domain in domain_stats%}
+      <div class="flex flex-col mt-5 first:mt-0">
+        <div class="flex flex-row">
+          <span class="font-bold truncate text-blue-300">{{domain["domain"]}}:</span>
+          <span class="font-bold truncate text-blue-300 ml-5">{{domain["pages_indexed"]}}</span>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </section>
+</div>
+
+{% endblock %}

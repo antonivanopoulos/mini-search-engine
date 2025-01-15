@@ -1,17 +1,24 @@
 from app import app
 from flask import request, render_template
 
+import time
+import os
 from pathlib import Path
 
-import time
-import app.index_handler as index_handler
+dirname = os.path.dirname(__file__)
 
-INDEX_PATH = Path("/Users/anton/workspace/kagi-project/indexer/index")
+INDEX_PATH = Path(os.path.join(dirname, "../indexer/index"))
 if not INDEX_PATH.exists():
   raise RuntimeError(f"Index not found at {INDEX_PATH}")
 
+STORE_PATH = Path(os.path.join(dirname, "../data/crawled_data.db"))
+if not STORE_PATH.exists():
+  raise RuntimeError(f"Document storage not found at {STORE_PATH}")
+
 from .index_handler import IndexHandler
 index = IndexHandler(index_path=str(INDEX_PATH))
+
+from .document_store import DocumentStore
 
 @app.route("/")
 def home():
@@ -32,4 +39,6 @@ def search():
 
 @app.route("/stats")
 def stats():
-  return render_template('stats.html')
+  domain_stats = DocumentStore.domain_stats(STORE_PATH)
+
+  return render_template('stats.html', domain_stats=domain_stats)
