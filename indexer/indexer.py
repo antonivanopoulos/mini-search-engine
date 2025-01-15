@@ -32,7 +32,7 @@ def create_index():
   schema_builder = tantivy.SchemaBuilder()
   schema_builder.add_text_field("title", stored=True)
   schema_builder.add_text_field("content", stored=True, tokenizer_name='en_stem')
-  schema_builder.add_text_field("url", stored=True)
+  schema_builder.add_text_field("url", stored=True, tokenizer_name="raw")
   schema = schema_builder.build()
 
   INDEX_PATH.mkdir(exist_ok=True)
@@ -56,6 +56,7 @@ def index_documents(index, documents):
       )
 
   writer.commit()
+  writer.wait_merging_threads()
   print(f"Indexed {len(documents)} documents.")
 
 def main():
