@@ -1,44 +1,32 @@
 import sqlite3
 import os
 import gzip
+import sys
 from pathlib import Path
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
+from app.document_store import DocumentStore
 
 dirname = os.path.dirname(__file__)
 
 class SqlitePipeline:
   def open_spider(self, spider):
-    database_path = Path(os.environ.get("DATABASE_PATH", os.path.join(dirname, "../../data/crawled_data.db")))
-
-    self.conn = sqlite3.connect(database_path)
-    self.cursor = self.conn.cursor()
-
-    self.cursor.execute("""
-    CREATE TABLE IF NOT EXISTS documents(
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      url TEXT UNIQUE NOT NULL,
-      domain TEXT NOT NULL,
-      title TEXT,
-      description TEXT,
-      content BLOB,
-      language TEXT
-    )
-    """)
-
-    self.cursor.execute("""
-    CREATE INDEX IF NOT EXISTS index_documents_on_domain ON documents (domain);
-    """)
-
-    self.conn.commit()
+    dirname = os.path.dirname(__file__)
+    database_path = Path(os.environ.get("DATABASE_PATH", os.path.join(dirname, "../../../data/crawled_data.db")))
+    self.db = DocumentStore(database_path)
 
   def close_spider(self, spider):
-    self.conn.close()
+    self.db.close_connection()
 
   def process_item(self, item, spider):
-    self.cursor.execute("""
-        INSERT INTO documents (url, domain, title, content, language)
-        VALUES (?, ?, ?, ?, ?)
-        ON CONFLICT(url) DO UPDATE SET content=excluded.content;
-    """, (item['url'], item['domain'], item['title'], gzip.compress(item['cleaned_content'].encode('utf-8')), item["language"]))
-    self.conn.commit()
+    self.db.insert_document(
+      url=item['url'],
+      domain=item['domain'],
+      title=item['title'],
+      description=item.get('description'),
+      content=item['cleaned_content'],
+      language=item.get('language')
+    )
 
     return item

@@ -20,12 +20,12 @@ NEWSPIDER_MODULE = "crawler.spiders"
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 200
+CONCURRENT_REQUESTS = 128
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0.3
+DOWNLOAD_DELAY = 0.2
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 8
 CONCURRENT_REQUESTS_PER_IP = 16
@@ -33,7 +33,6 @@ CONCURRENT_REQUESTS_PER_IP = 16
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-  # 'crawler.middlewares.SubdomainFilterMiddleware': 543,
   'crawler.middlewares.UserAgentRotatorMiddleware': 554,
   'crawler.middlewares.ContentFilterMiddleware': 543,
   "crawler.middlewares.DomainPageLimitMiddleware": 544,
@@ -51,7 +50,7 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 # Limit the number of pages per domain
-DOMAIN_PAGE_LIMIT = 10_000
+DOMAIN_PAGE_LIMIT = 1_000
 DOWNLOAD_TIMEOUT = 10
 JOBDIR = 'checkpoints/main_spider'
 
@@ -62,3 +61,5 @@ USER_AGENTS = [
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15'
 ]
+
+LOG_LEVEL = "INFO"

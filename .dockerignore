@@ -8,9 +8,11 @@
 
 # Crawler output
 **/crawler/.scrapy/*
-**/crawler/output/crawled_data.db
+**/crawler/checkpoints/*
 
-# Index output
-**/indexer/index/*
-**/indexer/target/*
+# Data
+**/data/crawled_data.db
+**/data/index/*
+**/data/target/*
+
 fly.toml

@@ -1,4 +1,5 @@
 import os
+import sys
 
 from app import create_app
 from pathlib import Path
@@ -14,7 +15,6 @@ index = create_or_open_index(index_path)
 index_handler = IndexHandler(index)
 
 database_path = Path(os.environ.get("DATABASE_PATH", os.path.join(dirname, "data/crawled_data.db")))
-document_store = DocumentStore(str(database_path))
-document_store.setup()
+document_store = DocumentStore(database_path)
 
 app = create_app(index_handler, document_store)

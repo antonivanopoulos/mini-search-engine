@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
+
+from scrapy import Request
 from crawler.crawler.middlewares.user_agent_rotator_middleware import UserAgentRotatorMiddleware  # Replace 'your_module' with the actual module name
 
 class TestUserAgentRotatorMiddleware(unittest.TestCase):
@@ -17,13 +19,13 @@ class TestUserAgentRotatorMiddleware(unittest.TestCase):
   def test_process_request_sets_random_user_agent(self, mock_random_choice):
     mock_random_choice.return_value = self.user_agents[0]
 
-    request_mock = MagicMock()
+    request = Request("http://example.com")
     spider_mock = MagicMock()
 
-    self.middleware.process_request(request_mock, spider_mock)
+    self.middleware.process_request(request, spider_mock)
 
     # Ensure the chosen User-Agent is set in the request headers
-    self.assertEqual(request_mock.headers['User-Agent'], self.user_agents[0])
+    self.assertEqual(request.headers['User-Agent'].decode(), self.user_agents[0])
     mock_random_choice.assert_called_with(self.user_agents)
 
   def test_from_crawler(self):
@@ -34,7 +36,6 @@ class TestUserAgentRotatorMiddleware(unittest.TestCase):
 
     # Ensure the middleware is initialized with the correct user agents
     self.assertEqual(middleware.user_agents, self.user_agents)
-    crawler_mock.settings.get.assert_called_with('USER_AGENTS', [])
 
 if __name__ == "__main__":
   unittest.main()

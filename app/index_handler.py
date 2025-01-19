@@ -37,11 +37,16 @@ class IndexHandler:
   def escape_query(self, query):
     # Remove quoted parts from a query temporarily so that we can leave them as is
     quoted_pattern = re.compile(r'".*?"')
+    quoted_parts = quoted_pattern.findall(query)
     query_without_quotes = quoted_pattern.sub("\u0000", query)
 
     # Escape the rest of the components of the search query
     escaped_phrases = [self.escape_phrase(phrase) for phrase in query_without_quotes.split(" ")]
-    return " ".join(escaped_phrases)
+    escaped_query = " ".join(escaped_phrases)
+    for quoted_part in quoted_parts:
+      escaped_query = escaped_query.replace("\u0000", quoted_part, 1)
+
+    return escaped_query
 
   def escape_phrase(self, phrase):
     special_chars = r'+-&|!(){}[]^"~*?:\\/'

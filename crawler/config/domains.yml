@@ -145,9 +145,6 @@ domains:
     - "elm-lang.org"
     start_url: "https://elm-lang.org/"
   - allowed_domains:
-    - "en.cppreference.com"
-    start_url: "https://en.cppreference.com/"
-  - allowed_domains:
     - "enzymejs.github.io"
     start_url: "https://enzymejs.github.io/"
   - allowed_domains:
@@ -252,9 +249,6 @@ domains:
   - allowed_domains:
     - "latexref.xyz"
     start_url: "https://latexref.xyz/"
-  - allowed_domains:
-    - "learn.microsoft.com"
-    start_url: "https://learn.microsoft.com/"
   - allowed_domains:
     - "lesscss.org"
     start_url: "https://lesscss.org/"
@@ -498,3 +492,9 @@ domains:
   - allowed_domains:
     - "yarnpkg.com"
     start_url: "https://yarnpkg.com/"
+  - allowed_domains:
+    - "en.cppreference.com"
+    start_url: "https://en.cppreference.com/"
+  - allowed_domains:
+    - "learn.microsoft.com"
+    start_url: "https://learn.microsoft.com/"

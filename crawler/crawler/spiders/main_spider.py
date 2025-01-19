@@ -1,8 +1,10 @@
+
 from pathlib import Path
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
+import tldextract
 import yaml
 
 from crawler.items import DocumentItem
@@ -37,7 +39,8 @@ class MainSpider(CrawlSpider):
           self.start_urls = [domain["start_url"] for domain in domains]
 
     def parse_item(self, response):
-      domain = response.url.split("/")[2]
+      extracted = tldextract.extract(response.url)
+      domain = f"{extracted.domain}.{extracted.suffix}"
 
       item = DocumentItem()
       item['url'] = response.url
