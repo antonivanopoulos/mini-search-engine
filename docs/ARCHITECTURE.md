@@ -85,6 +85,11 @@ Tantivy requires some escaping of special characters before strings are passed t
 
 The index handler does a little pass through of the submitted query and extracts already-quoted segments and then escapes the rest before plugging everything back together and submitting for parsing and searching the index.
 
+**Challenge: A more automated and incremental crawler-to-index pipeline**
+A sharp edge of this current implementation is around the all-or-nothing, and manual,  approach to crawling and indexing. A major improvement from this point would be to look at implementing a more incremental crawling, updating and re-indexing of content, rather than crawling everything, and then running a script then re-index everything from that database, regardless of whether or not it's changed. This might need to include an addition to the database that tracks the last time a page was crawled, a hash of the content, and a timestamp of the last time it changed. We might also need to track the last time a page was indexed.
+
+In regards to automation, I think this could be done through something like Celery or a more sophisticated workflow orchestration system like Airflow. I think this particular piece of work coincides with any decisions regarding optimisations around splitting the crawler into processes as well, as perhaps each batch of domains being crawled by a shard could then initiate the indexer on the new round of changes.
+
 ## Interface
 The web application that acts as an interface for searching our index is written using Flask, a lightweight Python-based web application framework. Our interface is relatively lightweight with three different pages, so this choice makes sense for us to get up and running without too much fuss.
 
