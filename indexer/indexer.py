@@ -33,10 +33,11 @@ def create_index(index_path):
 def index_documents(index, database_path):
   conn = sqlite3.connect(database_path)
   cursor = conn.cursor()
-  writer = index.writer()
 
   cursor.execute("SELECT title, content, url, language FROM documents")
-  for batch in iter(lambda: cursor.fetchmany(100), []):
+  for batch in iter(lambda: cursor.fetchmany(1000), []):
+    print("Writing batch")
+    writer = index.writer()
     for row in batch:
       if row[0] and row[1] and row[2]:
         # Tantivy doesn't really do updates as atomic operations, we need to delete the existing document using the URL
@@ -50,9 +51,9 @@ def index_documents(index, database_path):
             language=row[3] or "en"
           )
         )
+    writer.commit()
+    writer.wait_merging_threads()
 
-  writer.commit()
-  writer.wait_merging_threads()
   conn.close()
   print(f"Finished indexing")
 
