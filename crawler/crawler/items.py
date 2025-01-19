@@ -10,5 +10,7 @@ class DocumentItem(scrapy.Item):
     url = scrapy.Field()
     domain = scrapy.Field()
     title = scrapy.Field()
-    content = scrapy.Field()
+    html_content = scrapy.Field()
+    cleaned_content = scrapy.Field()
     last_updated = scrapy.Field()
+    language = scrapy.Field()
