@@ -1,0 +1,16 @@
+# flyctl launch added from .gitignore
+**/.DS_Store
+
+# Byte-compiled / optimized / DLL files
+**/__pycache__
+**/*.py[cod]
+**/*$py.class
+
+# Crawler output
+**/crawler/.scrapy/*
+**/crawler/output/crawled_data.db
+
+# Index output
+**/indexer/index/*
+**/indexer/target/*
+fly.toml

@@ -1,0 +1,17 @@
+.DS_Store
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Crawler output
+crawler/.scrapy/*
+crawler/output/crawled_data.db
+crawler/checkpoints/*
+
+
+# Data
+data/crawled_data.db
+data/index/*
+data/target/*
