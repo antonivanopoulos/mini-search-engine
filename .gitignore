@@ -9,8 +9,9 @@ __pycache__/
 crawler/.scrapy/*
 crawler/checkpoints/*
 
-
 # Data
 data/crawled_data.db
+data/crawled_data.db-journal
 data/index/*
 data/target/*
+tests/support/document_store.db
